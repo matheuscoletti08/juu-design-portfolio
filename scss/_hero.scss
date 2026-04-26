@@ -1,0 +1,120 @@
+.hero {
+  min-height: 100vh;
+  padding: 0; // Remove global section padding
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  
+  // Ajuste para compensar a navbar fixa
+  padding-top: 80px; 
+
+  @media (min-width: 768px) {
+    padding-top: 100px;
+  }
+
+  &__main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-md);
+  }
+
+  &__images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    @media (min-width: 768px) {
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__img {
+    width: 25vw;
+    max-width: 120px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background-color: $color-grey;
+    transition: $transition;
+    border: 1px solid rgba($color-white, 0.1);
+
+    @media (min-width: 768px) {
+      max-width: 200px;
+      &:nth-child(even) {
+        transform: translateY(20px);
+      }
+      &:hover {
+        transform: scale(1.05) rotate(2deg);
+        z-index: 10;
+        border-color: $color-blue;
+      }
+    }
+  }
+
+  &__title {
+    font-size: var(--font-display);
+    font-weight: 800;
+    line-height: 0.9;
+    text-transform: uppercase;
+    
+    span.outline {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba($color-white, 0.2);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid $color-border;
+    
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  &__tagline {
+    font-size: var(--font-md);
+    max-width: 30ch;
+    text-transform: uppercase;
+    font-weight: 300;
+    opacity: 0.8;
+  }
+
+  &__cta {
+    width: 120px;
+    height: 120px;
+    border: 1px solid rgba($color-white, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    transition: $transition;
+    align-self: center; // Centraliza no mobile
+
+    @media (min-width: 768px) {
+      align-self: auto; // Volta ao normal no desktop
+    }
+    
+    &:hover {
+      background: $color-blue;
+      border-color: $color-blue;
+      transform: scale(1.1);
+    }
+  }
+}
