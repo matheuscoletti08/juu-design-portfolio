@@ -1,0 +1,37 @@
+.services {
+  &__item {
+    border-top: 1px solid $color-border;
+    padding: var(--space-md) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: $transition;
+    cursor: pointer;
+
+    @media (min-width: 768px) { 
+      padding: var(--space-lg) 0; 
+    }
+
+    &:hover {
+      padding-left: 2rem;
+      background: rgba($color-white, 0.02);
+      .services__title { color: $color-blue; }
+    }
+
+    &:last-child { 
+      border-bottom: 1px solid $color-border; 
+    }
+  }
+
+  &__title { 
+    font-size: var(--font-lg); 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    transition: $transition; 
+  }
+
+  &__index { 
+    font-size: var(--font-xs); 
+    opacity: 0.3; 
+  }
+}
