@@ -1,0 +1,62 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background-color: $color-black;
+  color: $color-white;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+
+  &::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/5c/Image_noise_example.png');
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 10000;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+section {
+  padding: var(--space-lg) 0;
+  @media (min-width: 768px) {
+    padding: var(--space-xl) 0;
+  }
+  position: relative;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: 0.3s;
+  &:hover { color: $color-blue; }
+}
+
+.label { 
+  font-size: var(--font-xs); 
+  color: $color-blue; 
+  display: block; 
+  margin-bottom: var(--space-sm); 
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+}
