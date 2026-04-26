@@ -1,0 +1,30 @@
+// Colors
+$color-black: #050505;
+$color-white: #FFFFFF;
+$color-blue: #000AFF;
+$color-grey: #171718;
+$color-border: rgba(255, 255, 255, 0.1);
+
+// Material 3 Expressive Easing
+$ease-emphasized: cubic-bezier(0.2, 0.0, 0, 1.0); // A curva principal do Google M3
+$ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+// Fluid Logic
+:root {
+  --font-display: #{clamp(3.5rem, 10vw, 12rem)};
+  --font-xl: #{clamp(2rem, 6vw, 5rem)};
+  --font-lg: #{clamp(1.5rem, 3vw, 2.5rem)};
+  --font-md: #{clamp(1.1rem, 2vw, 1.5rem)};
+  --font-base: #{clamp(0.95rem, 1.2vw, 1.1rem)};
+  --font-xs: 0.75rem;
+
+  --space-xl: #{clamp(3.5rem, 12vh, 12rem)};
+  --space-lg: #{clamp(2rem, 8vh, 6rem)};
+  --space-md: #{clamp(1.2rem, 4vh, 3rem)};
+  --space-sm: 1rem;
+  
+  --container-padding: #{clamp(1.5rem, 5vw, 6rem)};
+}
+
+$transition: all 0.5s $ease-emphasized;
+$transition-long: all 0.8s $ease-emphasized;
