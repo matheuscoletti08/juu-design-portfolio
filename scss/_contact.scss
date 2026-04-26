@@ -1,0 +1,22 @@
+.contact {
+  h2 { 
+    font-size: var(--font-display); 
+    font-weight: 800; 
+    line-height: 0.8; 
+    margin: var(--space-md) 0; 
+    text-transform: uppercase; 
+  }
+
+  .contact-links {
+    display: flex; 
+    gap: 3rem; 
+    flex-wrap: wrap; 
+    margin-top: var(--space-lg);
+    
+    a { 
+      font-size: var(--font-lg); 
+      font-weight: 700; 
+      text-transform: uppercase;
+    }
+  }
+}
