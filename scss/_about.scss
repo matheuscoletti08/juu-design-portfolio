@@ -1,0 +1,21 @@
+.about {
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1000px;
+    
+    h2 { 
+      font-size: var(--font-xl); 
+      font-weight: 800; 
+      line-height: 1; 
+      text-transform: uppercase; 
+    }
+    
+    p { 
+      font-size: var(--font-md); 
+      opacity: 0.7; 
+      max-width: 60ch; 
+    }
+  }
+}
