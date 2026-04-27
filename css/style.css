@@ -12,6 +12,10 @@
   --container-padding: clamp(1.5rem, 5vw, 6rem);
 }
 
+.text-blue {
+  color: #000AFF !important;
+}
+
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -250,11 +254,13 @@ a:hover {
   gap: 1rem;
   width: 100%;
   margin-bottom: 1rem;
+  --hero-offset: 15px;
 }
 @media (min-width: 768px) {
   .hero__images {
     gap: 2rem;
     margin-bottom: 2rem;
+    --hero-offset: 20px;
   }
 }
 .hero__img {
@@ -263,20 +269,45 @@ a:hover {
   aspect-ratio: 4/5;
   object-fit: cover;
   background-color: #171718;
-  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1), border-color 0.5s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  will-change: transform, opacity;
+  opacity: 0;
+  animation: heroImageEntrance 1.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+.hero__img:nth-child(even) {
+  --current-offset: var(--hero-offset);
+}
+.hero__img:nth-child(odd) {
+  --current-offset: 0px;
+}
+.hero__img:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.hero__img:nth-child(2) {
+  animation-delay: 0.25s;
+}
+.hero__img:nth-child(3) {
+  animation-delay: 0.4s;
 }
 @media (min-width: 768px) {
   .hero__img {
     max-width: 200px;
   }
-  .hero__img:nth-child(even) {
-    transform: translateY(20px);
-  }
   .hero__img:hover {
-    transform: scale(1.05) rotate(2deg);
+    transform: scale(1.05) rotate(2deg) translateY(var(--current-offset));
     z-index: 10;
     border-color: #000AFF;
+  }
+}
+@keyframes heroImageEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(var(--current-offset)) scale(1);
   }
 }
 .hero__title {
@@ -473,14 +504,31 @@ a:hover {
 }
 .contact .contact-links {
   display: flex;
-  gap: 3rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1.5rem;
   margin-top: var(--space-lg);
+}
+@media (min-width: 768px) {
+  .contact .contact-links {
+    flex-direction: row;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
 }
 .contact .contact-links a {
   font-size: var(--font-lg);
   font-weight: 700;
   text-transform: uppercase;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+}
+.contact .contact-links a:hover {
+  color: #000AFF;
+  transform: translateX(10px);
+}
+@media (min-width: 768px) {
+  .contact .contact-links a:hover {
+    transform: translateY(-5px);
+  }
 }
 
 footer {
@@ -493,6 +541,70 @@ footer p {
   opacity: 0.3;
   text-transform: uppercase;
   letter-spacing: 0.2em;
+}
+
+::view-transition-group(hero-expand) {
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+::view-transition-old(hero-expand) {
+  animation: 0.3s cubic-bezier(0.4, 0, 0.2, 1) both fade-out;
+}
+
+::view-transition-new(hero-expand) {
+  animation: 0.8s cubic-bezier(0.2, 0, 0, 1) both scale-in, 0.4s cubic-bezier(0.4, 0, 0.2, 1) both fade-in;
+}
+
+html[data-transition=menu] ::view-transition-old(root) {
+  animation: 0.4s cubic-bezier(0.4, 0, 0.2, 1) both fade-out, 0.4s cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
+html[data-transition=menu] ::view-transition-new(root) {
+  animation: 0.8s cubic-bezier(0.2, 0, 0, 1) both fade-in, 0.8s cubic-bezier(0.2, 0, 0, 1) both slide-from-right;
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-30px);
+  }
+}
+@keyframes slide-from-right {
+  from {
+    transform: translateX(30px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes scale-in {
+  from {
+    clip-path: circle(0% at 50% 50%);
+    transform: scale(0.8);
+  }
+  to {
+    clip-path: circle(150% at 50% 50%);
+    transform: scale(1);
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
