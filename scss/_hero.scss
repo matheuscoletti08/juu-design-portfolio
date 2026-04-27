@@ -30,10 +30,12 @@
     gap: 1rem;
     width: 100%;
     margin-bottom: 1rem;
+    --hero-offset: 15px;
 
     @media (min-width: 768px) {
       gap: 2rem;
       margin-bottom: 2rem;
+      --hero-offset: 20px;
     }
   }
 
@@ -43,21 +45,45 @@
     aspect-ratio: 4 / 5;
     object-fit: cover;
     background-color: $color-grey;
-    transition: $transition;
+    transition: transform 0.8s $ease-emphasized, border-color 0.5s ease;
     border: 1px solid rgba($color-white, 0.1);
+    
+    will-change: transform, opacity;
+    opacity: 0;
+    
+    // Duração maior para a curva do M3 se expressar (1.4s)
+    animation: heroImageEntrance 1.4s $ease-emphasized forwards;
+
+    &:nth-child(even) { --current-offset: var(--hero-offset); }
+    &:nth-child(odd) { --current-offset: 0px; }
+
+    // Delays mais espaçados para criar uma sequência elegante
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.25s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
 
     @media (min-width: 768px) {
       max-width: 200px;
-      &:nth-child(even) {
-        transform: translateY(20px);
-      }
       &:hover {
-        transform: scale(1.05) rotate(2deg);
+        transform: scale(1.05) rotate(2deg) translateY(var(--current-offset));
         z-index: 10;
         border-color: $color-blue;
       }
     }
   }
+
+  @keyframes heroImageEntrance {
+    from {
+      opacity: 0;
+      // Começa de mais longe (60px) e menor (0.8) para dar o efeito "expressive"
+      transform: translateY(60px) scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(var(--current-offset)) scale(1);
+    }
+  }
+
 
   &__title {
     font-size: var(--font-display);
