@@ -1,0 +1,67 @@
+// View Transitions API Styles
+::view-transition-group(hero-expand) {
+    animation-duration: 0.8s;
+    animation-timing-function: $ease-emphasized;
+}
+
+::view-transition-old(hero-expand) {
+    animation: 0.3s $ease-standard both fade-out;
+}
+
+::view-transition-new(hero-expand) {
+    animation: 
+        0.8s $ease-emphasized both scale-in,
+        0.4s $ease-standard both fade-in;
+}
+
+// Quando a transição vem do menu, fazemos um slide lateral
+html[data-transition="menu"] {
+    ::view-transition-old(root) {
+        animation: 0.4s $ease-standard both fade-out,
+                   0.4s $ease-standard both slide-to-left;
+    }
+    ::view-transition-new(root) {
+        animation: 0.8s $ease-emphasized both fade-in,
+                   0.8s $ease-emphasized both slide-from-right;
+    }
+}
+
+@keyframes slide-to-left {
+    to { transform: translateX(-30px); }
+}
+
+@keyframes slide-from-right {
+    from { transform: translateX(30px); }
+    to { transform: translateX(0); }
+}
+
+
+@keyframes scale-in {
+    from { 
+        clip-path: circle(0% at 50% 50%);
+        transform: scale(0.8);
+    }
+    to { 
+        clip-path: circle(150% at 50% 50%);
+        transform: scale(1);
+    }
+}
+
+@keyframes fade-out {
+    to { opacity: 0; }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+}
+
+@keyframes slide-up-fade {
+    from { 
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

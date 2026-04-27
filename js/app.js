@@ -9,7 +9,7 @@ function initScrollEffects() {
     window.addEventListener('scroll', () => {
         const isScrolled = window.scrollY > 50;
         header.classList.toggle('scrolled', isScrolled);
-    });
+    }, { passive: true });
 }
 
 function initMobileMenu() {
@@ -44,15 +44,38 @@ async function navigateToPage(url) {
         const nextDoc = parser.parseFromString(html, 'text/html');
         const nextMain = nextDoc.querySelector('#content-wrap');
         
-        document.startViewTransition(() => {
+        const expandingElement = document.querySelector('[style*="view-transition-name"]');
+        const transitionName = expandingElement ? expandingElement.style.viewTransitionName : null;
+
+        const transition = document.startViewTransition(() => {
+            if (transitionName) {
+                nextMain.style.viewTransitionName = transitionName;
+            }
+            
+            document.documentElement.style.scrollBehavior = 'auto';
             document.querySelector('#content-wrap').innerHTML = nextMain.innerHTML;
             document.title = nextDoc.title;
             window.history.pushState({}, '', url.href);
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            
+            if (url.hash) {
+                const id = url.hash.replace('#', '');
+                const el = document.getElementById(id);
+                if (el) window.scrollTo(0, el.offsetTop - 60);
+            } else {
+                window.scrollTo(0, 0);
+            }
+
             updateActiveLinks();
+            setTimeout(() => { document.documentElement.style.scrollBehavior = ''; }, 0);
         });
+
+        // IMPORTANTE: Só limpa o nome APÓS a animação terminar completamente
+        await transition.finished;
+        nextMain.style.viewTransitionName = '';
     } catch (err) {
         window.location.href = url.href;
+    } finally {
+        delete document.documentElement.dataset.transition;
     }
 }
 
@@ -62,14 +85,27 @@ function initNavigation() {
         if (!link || !link.href) return;
         
         const url = new URL(link.href);
-        if (url.origin === window.location.origin && !link.hash && !link.target) {
-            e.preventDefault();
-            navigateToPage(url);
+        const isInternal = url.origin === window.location.origin;
+        const isSamePageHash = url.pathname === window.location.pathname && link.hash;
+
+        if (isInternal && !link.target) {
+            const isMobileLink = link.closest('.mobile-nav');
+
+            if (isMobileLink || !isSamePageHash) {
+                e.preventDefault();
+                
+                if (link.classList.contains('hero__cta')) {
+                    link.style.viewTransitionName = 'hero-expand';
+                } else if (isMobileLink) {
+                    document.documentElement.dataset.transition = 'menu';
+                }
+                
+                navigateToPage(url);
+            }
         }
     });
-
-    window.onpopstate = () => location.reload();
 }
+
 
 function updateActiveLinks() {
     const path = window.location.pathname;
