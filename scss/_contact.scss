@@ -1,22 +1,40 @@
 .contact {
-  h2 { 
-    font-size: var(--font-display); 
-    font-weight: 800; 
-    line-height: 0.8; 
-    margin: var(--space-md) 0; 
-    text-transform: uppercase; 
+  h2 {
+    font-size: var(--font-display);
+    font-weight: 800;
+    line-height: 0.8;
+    margin: var(--space-md) 0;
+    text-transform: uppercase;
   }
 
   .contact-links {
-    display: flex; 
-    gap: 3rem; 
-    flex-wrap: wrap; 
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     margin-top: var(--space-lg);
-    
-    a { 
-      font-size: var(--font-lg); 
-      font-weight: 700; 
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    a {
+      font-size: var(--font-lg);
+      font-weight: 700;
       text-transform: uppercase;
+      transition: $transition;
+
+      &:hover {
+        color: $color-blue;
+        transform: translateX(10px);
+      }
+
+      @media (min-width: 768px) {
+        &:hover {
+          transform: translateY(-5px);
+        }
+      }
     }
   }
 }
