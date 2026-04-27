@@ -3,22 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juu Freitas | Creative Direction</title>
+    <title>Juu Freitas | Portfólio</title>
+
+        <!-- Open Graph (Instagram, WhatsApp, Facebook, LinkedIn etc.) -->
+    <meta property="og:title" content="Juu Freitas | Portfólio">
+    <meta property="og:description" content="Design premium, fotografia e direção criativa para marcas que buscam excelência visual.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://juufreitas.netlify.app">
+    <meta property="og:image" content="https://juufreitas.netlify.app/assets/img/preview.webp">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Juu Freitas | Portfólio">
+    <meta name="twitter:description" content="Portfólio profissional com estética minimalista e visual premium.">
+    <meta name="twitter:image" content="https://juufreitas.netlify.app/assets/img/preview.webp">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preload" as="image" href="assets/images/juuh1.webp">
+    <link rel="preload" as="image" href="assets/images/juuh2.webp">
+    <link rel="preload" as="image" href="assets/images/juuh3.webp">
 </head>
 <body>
 
     <header class="header">
         <div class="container">
-            <div class="header-status"><span></span> Available</div>
             <a href="index.html" class="logo">JUU.FREITAS</a>
             <nav class="nav-menu">
                 <a href="index.html" class="active">Home</a>
                 <a href="projetos.html">Projetos</a>
-                <a href="index.html#contato">Contato</a>
+                <a href="#contato">Contato</a>
             </nav>
             <div class="nav-toggle">
                 <div class="burger"></div>
@@ -38,11 +54,12 @@
         <!-- HOME CONTENT -->
         <section class="hero" id="home">
             <div class="container">
+                
                 <div class="hero__main">
-                    <div class="hero__images">
-                        <img src="https://i.ibb.co/spWbDnX4/IMG-6900-1.png" alt="Creative Work 1" class="hero__img" fetchpriority="high" decoding="async">
-                        <img src="https://i.ibb.co/Mk2yVF3c/IMG-7431-1.png" alt="Creative Work 2" class="hero__img" fetchpriority="high" decoding="async">
-                        <img src="https://i.ibb.co/67qcN4BV/IMG-8282-JPG-1.png" alt="Creative Work 3" class="hero__img" fetchpriority="high" decoding="async">
+                    <div class="hero__images" style="filter: grayscale(100%);">
+                        <img src="assets/images/juuh1.webp" alt="Creative Work 1" class="hero__img" loading="eager" decoding="sync">
+                        <img src="assets/images/juuh2.webp" alt="Creative Work 2" class="hero__img" loading="eager" decoding="sync">
+                        <img src="assets/images/juuh3.webp" alt="Creative Work 3" class="hero__img" loading="eager" decoding="sync">
                     </div>
                     <h1 class="hero__title">JULIA FREITAS<span class="outline">NOT JUST DESIGN</span></h1>
                 </div>
@@ -63,13 +80,13 @@
             </div>
         </section>
 
-        <section id="contato" class="contact">
+        <section class="contact" id="contato">
             <div class="container">
                 <span class="label">02 / Contato</span>
                 <h2>VAMOS <span class="text-blue">CRIAR?</span></h2>
                 <div class="contact-links">
-                    <a href="#">Instagram</a>
-                    <a href="#">WhatsApp</a>
+                    <a href="https://www.instagram.com/pictures.jully/">Instagram</a>
+                    <a href="https://api.whatsapp.com/send?phone=5511980523328&text=Oii%20Juu!%20Vi%20seu%20portf%C3%B3lio%20e%20gostei%20muito%20do%20seu%20trabalho%2C%20queria%20conversar%20com%20voc%C3%AA%20sobre%20um%20projeto%20que%20tenho%20em%20mente%20%F0%9F%98%8A%E2%9D%A4%EF%B8%8F">WhatsApp</a>
                     <a href="mailto:hello@juufreitas.com">Email</a>
                 </div>
             </div>
@@ -79,7 +96,7 @@
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 Julia Freitas — All rights reserved.</p>
-            <p style="font-size: 0.89em;">feito por <a href="https://github.com/matheuscoletti08">ℭoletti</a></p>
+            <p style="font-size: 0.79em;">feito por <a href="https://github.com/matheuscoletti08">ℭoletti</a></p>
         </div>
     </footer>
 
