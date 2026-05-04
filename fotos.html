@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projetos | Juu Freitas</title>
+    <title>Fotos | Juu Freitas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
     <div class="mobile-overlay">
         <nav class="mobile-nav">
             <a href="index.html">Home</a>
-            <a href="projetos.html">Projetos</a>
+            <a href="projetos.html" class="active">Projetos</a>
             <a href="index.html#contato">Contato</a>
         </nav>
     </div>
@@ -37,27 +37,23 @@
     <main id="content-wrap">
         <section class="portfolio" style="padding-top: 150px;">
             <div class="container">
-                <span class="label">Trabalhos Selecionados</span>
-                <h1 style="font-size: var(--font-xl); font-weight: 800; text-transform: uppercase; line-height: 0.9;">PROJETOS <br><span class="text-blue">CURADOS.</span></h1>
+                <a href="projetos.html" class="label" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; cursor: pointer;">
+                    ← Voltar para Projetos
+                </a>
+                <h1 style="font-size: var(--font-xl); font-weight: 800; text-transform: uppercase; line-height: 0.9;">GALERIA DE <br><span class="text-blue">FOTOGRAFIA.</span></h1>
                 
-                <div class="projects-split">
-                    <a href="fotos.html" class="projects-split__block">
-                        <div class="projects-split__bg" style="background-image: url('assets/images/divisor.webp')"></div>
-                        <div class="projects-split__content">
-                            <span class="projects-split__label">Trabalhos de</span>
-                            <h2 class="projects-split__title">Fotos</h2>
-                        </div>
-                    </a>
-                    <a href="design.html" class="projects-split__block">
-                        <div class="projects-split__bg" style="background-image: url('assets/images/divisor.webp'); transform: rotate(180deg);"></div>
-                        <div class="projects-split__content">
-                            <span class="projects-split__label">Trabalhos de</span>
-                            <h2 class="projects-split__title">Design</h2>
-                        </div>
-                    </a>
-                </div>
+                <!-- Grid dinâmico carregado via JS -->
+                <div id="photo-grid" class="gallery-grid"></div>
             </div>
         </section>
+
+        <!-- Modal / Lightbox -->
+        <div id="photo-modal" class="modal">
+            <div class="modal__content">
+                <button class="modal__close" aria-label="Fechar">&times;</button>
+                <img src="" alt="" class="modal__img">
+            </div>
+        </div>
     </main>
 
     <footer class="footer">
