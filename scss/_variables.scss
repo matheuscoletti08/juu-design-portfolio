@@ -5,9 +5,20 @@ $color-blue: #000AFF;
 $color-grey: #171718;
 $color-border: rgba(255, 255, 255, 0.1);
 
-// Material 3 Expressive Easing
-$ease-emphasized: cubic-bezier(0.2, 0.0, 0, 1.0); // A curva principal do Google M3
-$ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+// Material 3 Expressive Curves
+$m3-emphasized: cubic-bezier(0.2, 0, 0, 1);
+$m3-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+$m3-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+// Aliases for easier use
+$ease-emphasized: $m3-emphasized;
+$ease-decelerate: $m3-decelerate;
+$ease-accelerate: $m3-accelerate;
+
+// Durations
+$duration-short: 200ms;  // Micro interactions
+$duration-medium: 350ms; // Transitions
+$duration-large: 500ms;  // Modal / Page transitions
 
 // Fluid Logic
 :root {
@@ -26,5 +37,5 @@ $ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
   --container-padding: #{clamp(1.5rem, 5vw, 6rem)};
 }
 
-$transition: all 0.5s $ease-emphasized;
-$transition-long: all 0.8s $ease-emphasized;
+$transition: all $duration-medium $ease-emphasized;
+$transition-long: all $duration-large $ease-emphasized;

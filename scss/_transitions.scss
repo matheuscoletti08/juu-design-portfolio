@@ -1,28 +1,40 @@
 // View Transitions API Styles
-::view-transition-group(hero-expand) {
-    animation-duration: 0.8s;
-    animation-timing-function: $ease-emphasized;
+::view-transition-group(root) {
+    animation-duration: $duration-large;
+    animation-timing-function: $m3-emphasized;
 }
 
-::view-transition-old(hero-expand) {
-    animation: 0.3s $ease-standard both fade-out;
+// Transição de expansão (Projetos -> Galeria)
+html[data-transition="expand"] {
+    ::view-transition-old(root) {
+        animation: $duration-short $m3-accelerate both fade-out,
+                   $duration-large $m3-emphasized both scale-out;
+    }
+    ::view-transition-new(root) {
+        animation: $duration-medium $m3-decelerate both fade-in,
+                   $duration-large $m3-emphasized both scale-in-up;
+    }
 }
 
-::view-transition-new(hero-expand) {
-    animation: 
-        0.8s $ease-emphasized both scale-in,
-        0.4s $ease-standard both fade-in;
+// Transição padrão (Fade suave)
+html[data-transition="fade"] {
+    ::view-transition-old(root) {
+        animation: $duration-medium $m3-accelerate both fade-out;
+    }
+    ::view-transition-new(root) {
+        animation: $duration-large $m3-decelerate both fade-in;
+    }
 }
 
 // Quando a transição vem do menu, fazemos um slide lateral
 html[data-transition="menu"] {
     ::view-transition-old(root) {
-        animation: 0.4s $ease-standard both fade-out,
-                   0.4s $ease-standard both slide-to-left;
+        animation: $duration-medium $m3-accelerate both fade-out,
+                   $duration-medium $m3-accelerate both slide-to-left;
     }
     ::view-transition-new(root) {
-        animation: 0.8s $ease-emphasized both fade-in,
-                   0.8s $ease-emphasized both slide-from-right;
+        animation: $duration-large $m3-decelerate both fade-in,
+                   $duration-large $m3-decelerate both slide-from-right;
     }
 }
 
@@ -35,15 +47,18 @@ html[data-transition="menu"] {
     to { transform: translateX(0); }
 }
 
+@keyframes scale-out {
+    to { transform: scale(1.05); opacity: 0; }
+}
 
-@keyframes scale-in {
+@keyframes scale-in-up {
     from { 
-        clip-path: circle(0% at 50% 50%);
-        transform: scale(0.8);
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
     }
     to { 
-        clip-path: circle(150% at 50% 50%);
-        transform: scale(1);
+        opacity: 1;
+        transform: scale(1) translateY(0);
     }
 }
 
@@ -53,15 +68,4 @@ html[data-transition="menu"] {
 
 @keyframes fade-in {
     from { opacity: 0; }
-}
-
-@keyframes slide-up-fade {
-    from { 
-        opacity: 0;
-        transform: translateY(30px) scale(0.98);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
 }

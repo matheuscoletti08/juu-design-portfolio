@@ -1,12 +1,11 @@
 .hero {
   min-height: 100vh;
-  padding: 0; // Remove global section padding
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   
-  // Ajuste para compensar a navbar fixa
   padding-top: 80px; 
 
   @media (min-width: 768px) {
@@ -45,37 +44,39 @@
     aspect-ratio: 4 / 5;
     object-fit: cover;
     background-color: $color-grey;
-    transition: transform 0.8s $ease-emphasized, border-color 0.5s ease;
+    transition: transform $duration-large $ease-emphasized, border-color $duration-medium $ease-decelerate;
     border: 1px solid rgba($color-white, 0.1);
     
     will-change: transform, opacity;
     opacity: 0;
     
-    // Duração maior para a curva do M3 se expressar (1.4s)
-    animation: heroImageEntrance 1.4s $ease-emphasized forwards;
+    animation: heroImageEntrance 1s $m3-decelerate forwards;
 
     &:nth-child(even) { --current-offset: var(--hero-offset); }
     &:nth-child(odd) { --current-offset: 0px; }
 
-    // Delays mais espaçados para criar uma sequência elegante
-    &:nth-child(1) { animation-delay: 0.1s; }
-    &:nth-child(2) { animation-delay: 0.25s; }
-    &:nth-child(3) { animation-delay: 0.4s; }
+    &:nth-child(1) { animation-delay: 100ms; }
+    &:nth-child(2) { animation-delay: 200ms; }
+    &:nth-child(3) { animation-delay: 300ms; }
 
     @media (min-width: 768px) {
       max-width: 200px;
       &:hover {
-        transform: scale(1.05) rotate(2deg) translateY(var(--current-offset));
+        transform: scale(1.04) rotate(2deg) translateY(var(--current-offset));
         z-index: 10;
         border-color: $color-blue;
       }
+    }
+
+    &:active {
+      transform: scale(0.98) translateY(var(--current-offset));
+      transition-duration: $duration-short;
     }
   }
 
   @keyframes heroImageEntrance {
     from {
       opacity: 0;
-      // Começa de mais longe (60px) e menor (0.8) para dar o efeito "expressive"
       transform: translateY(60px) scale(0.85);
     }
     to {
@@ -130,17 +131,22 @@
     justify-content: center;
     font-size: 0.7rem;
     text-transform: uppercase;
-    transition: $transition;
-    align-self: center; // Centraliza no mobile
+    transition: all $duration-medium $m3-emphasized;
+    align-self: center;
 
     @media (min-width: 768px) {
-      align-self: auto; // Volta ao normal no desktop
+      align-self: auto;
     }
     
     &:hover {
       background: $color-blue;
       border-color: $color-blue;
       transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.96);
+      transition-duration: $duration-short;
     }
   }
 }

@@ -5,7 +5,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: $transition;
+    transition: all $duration-medium $m3-emphasized;
     cursor: pointer;
 
     @media (min-width: 768px) { 
@@ -13,9 +13,14 @@
     }
 
     &:hover {
-      padding-left: 2rem;
+      padding-left: 1.5rem;
       background: rgba($color-white, 0.02);
       .services__title { color: $color-blue; }
+    }
+
+    &:active {
+      transform: scale(0.995);
+      transition-duration: $duration-short;
     }
 
     &:last-child { 
@@ -27,7 +32,7 @@
     font-size: var(--font-lg); 
     font-weight: 700; 
     text-transform: uppercase; 
-    transition: $transition; 
+    transition: color $duration-medium $m3-emphasized; 
   }
 
   &__index { 

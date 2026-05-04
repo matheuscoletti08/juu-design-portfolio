@@ -23,11 +23,16 @@
       font-size: var(--font-lg);
       font-weight: 700;
       text-transform: uppercase;
-      transition: $transition;
+      transition: all $duration-medium $m3-emphasized;
 
       &:hover {
         color: $color-blue;
         transform: translateX(10px);
+      }
+
+      &:active {
+        transform: scale(0.98);
+        transition-duration: $duration-short;
       }
 
       @media (min-width: 768px) {
