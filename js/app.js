@@ -7,17 +7,17 @@
 
 const CONFIG = {
     photos: [
-        'IMG_8553.webp', 'IMG_8554.webp', 'IMG_8555.webp',
+        'IMG_8554.webp', 'IMG_8555.webp', 'IMG_8567.webp',
         'IMG_8556.webp', 'IMG_8557.webp', 'IMG_8558.webp',
         'IMG_8559.webp', 'IMG_8560.webp', 'IMG_8561.webp',
         'IMG_8562.webp', 'IMG_8563.webp', 'IMG_8564.webp',
-        'IMG_8565.webp', 'IMG_8566.webp', 'IMG_8567.webp'
+        'IMG_8565.webp', 'IMG_8566.webp', 
     ],
     designs: [
         'IMG_7061.webp', 'IMG_7186.webp', 'IMG_8348.webp',
         'IMG_8527.webp', 'IMG_8529.webp', 'IMG_8530.webp',
         'IMG_8533.webp', 'IMG_8535.webp', 'IMG_8536.webp',
-        'IMG_9978.webp'
+        'IMG_9978.webp', 'IMG_8553.webp'
     ]
 };
 
