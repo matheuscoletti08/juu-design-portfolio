@@ -152,7 +152,7 @@ const GalleryModule = {
             const dx = t.clientX - this.swipeStartX;
             const dy = t.clientY - this.swipeStartY;
             if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
                 this.navigate(dx > 0 ? -1 : 1);
                 this.swipeStartX = 0;
             }
@@ -241,6 +241,7 @@ const GalleryModule = {
                 clickedImg.style.viewTransitionName = 'active-image';
 
                 const transition = document.startViewTransition(() => {
+                    clickedImg.style.viewTransitionName = '';
                     this.elements.modalImg.style.viewTransitionName = 'active-image';
                     this.elements.modalImg.src = src;
                     this.elements.modal.classList.remove('is-loading');
@@ -249,7 +250,7 @@ const GalleryModule = {
                 });
 
                 await transition.finished;
-                clickedImg.style.viewTransitionName = '';
+                this.elements.modalImg.style.viewTransitionName = '';
             } else {
                 this.elements.modalImg.src = src;
                 this.elements.modal.classList.remove('is-loading');
@@ -289,6 +290,7 @@ const GalleryModule = {
         if (this.state.current === this.STATES.IDLE) return;
 
         const finishClose = () => {
+            document.activeElement?.blur();
             this.state.current = this.STATES.IDLE;
             this.state.activeSrc = null;
             this.state.activeIndex = -1;
@@ -309,13 +311,13 @@ const GalleryModule = {
                 this.elements.modalImg.style.viewTransitionName = 'active-image';
 
                 const transition = document.startViewTransition(() => {
+                    this.elements.modalImg.style.viewTransitionName = '';
                     originalImg.style.viewTransitionName = 'active-image';
                     finishClose();
                 });
 
                 await transition.finished;
                 originalImg.style.viewTransitionName = '';
-                this.elements.modalImg.style.viewTransitionName = '';
             } else {
                 finishClose();
             }
