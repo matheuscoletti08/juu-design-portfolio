@@ -1,0 +1,39 @@
+@use 'variables' as *;
+
+body.cursor-visible {
+    cursor: none;
+
+    a, button, .gallery-grid__item, .projects-split__block, .services__item, .hero__cta,
+    input, textarea, select, [role="button"] {
+        cursor: none;
+    }
+}
+
+.cursor {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width $duration-medium $m3-emphasized, height $duration-medium $m3-emphasized, background $duration-medium $m3-emphasized, opacity $duration-medium $m3-emphasized;
+    mix-blend-mode: difference;
+    border: 1px solid $color-white;
+    opacity: 0;
+
+    body.cursor-visible & {
+        opacity: 1;
+    }
+
+    body.cursor-pointer & {
+        width: 56px;
+        height: 56px;
+        background: rgba($color-white, 0.08);
+        border-color: rgba($color-white, 0.3);
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+        display: none;
+    }
+}

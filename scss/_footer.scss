@@ -7,8 +7,10 @@ footer {
 
   p { 
     font-size: 0.7rem; 
-    opacity: 0.3; 
     text-transform: uppercase; 
     letter-spacing: 0.2em; 
+
+    &:first-child { opacity: 0.5; }
+    &:last-child { opacity: 0.35; }
   }
 }

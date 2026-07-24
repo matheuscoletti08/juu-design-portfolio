@@ -82,7 +82,7 @@
         .js-loaded & {
             opacity: 1;
             transform: translateY(0);
-            transition-delay: calc(400ms + (var(--index) * 60ms));
+            transition-delay: calc(400ms + (var(--index) * 30ms));
         }
         
         img {
@@ -207,7 +207,88 @@
         max-height: 85dvh;
         object-fit: contain;
         pointer-events: auto;
-        will-change: transform;
+        will-change: transform, opacity;
+        transition: opacity $duration-medium $m3-decelerate;
+    }
+
+    &__nav {
+        position: fixed;
+        top: 50%;
+        z-index: 2001;
+        transform: translateY(-50%) scale(0.8);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: $color-white;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transition: all $duration-medium $m3-emphasized;
+
+        .active & {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(-50%) scale(1);
+            transition-delay: 200ms;
+        }
+
+        &--prev {
+            left: max(16px, env(safe-area-inset-left));
+        }
+
+        &--next {
+            right: max(16px, env(safe-area-inset-right));
+        }
+
+        &:active {
+            transform: translateY(-50%) scale(0.9);
+            background: $color-blue;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                background: $color-blue;
+                border-color: $color-blue;
+                transform: translateY(-50%) scale(1.1);
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            display: none;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    &__counter {
+        position: fixed;
+        bottom: max(24px, env(safe-area-inset-bottom));
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        z-index: 2001;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        opacity: 0;
+        color: $color-white;
+        pointer-events: none;
+        transition: all $duration-medium $m3-emphasized;
+
+        .active & {
+            opacity: 0.5;
+            transform: translateX(-50%) translateY(0);
+            transition-delay: 300ms;
+        }
     }
 
     &__close {
