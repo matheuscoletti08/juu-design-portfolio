@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 // Material 3 / Mobile-Native "Sugar" Transition
 ::view-transition-old(active-image),
 ::view-transition-new(active-image) {

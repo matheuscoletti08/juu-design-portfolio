@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .header {
   view-transition-name: main-header;
   position: fixed;

@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 // View Transitions API Styles
 ::view-transition-group(root) {
     animation-duration: $duration-large;

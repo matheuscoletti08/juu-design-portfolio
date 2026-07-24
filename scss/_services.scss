@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .services {
   &__item {
     border-top: 1px solid $color-border;
