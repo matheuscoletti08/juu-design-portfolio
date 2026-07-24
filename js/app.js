@@ -204,6 +204,7 @@ const GalleryModule = {
             this.elements.modal.classList.remove('is-loading');
             this.state.current = this.STATES.OPEN;
             this.updateCounter();
+            this.preloadAdjacent(index);
         } catch (error) {
             console.error('Navigation preload failed:', error);
             this.state.current = this.STATES.OPEN;
@@ -257,6 +258,7 @@ const GalleryModule = {
             }
 
             this.updateCounter();
+            this.preloadAdjacent(index);
             this.elements.closeBtn.focus();
         } catch (error) {
             console.error('Gallery preloader failed:', error);
@@ -268,8 +270,18 @@ const GalleryModule = {
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = resolve;
-            img.onerror = reject;
+            img.onerror = resolve;
             img.src = src;
+        });
+    },
+
+    preloadAdjacent(fromIndex) {
+        const indices = [fromIndex - 1, fromIndex + 1];
+        indices.forEach(i => {
+            if (i >= 0 && i < this.state.collection.length) {
+                const img = new Image();
+                img.src = `${this.state.basePath}${this.state.collection[i]}`;
+            }
         });
     },
 

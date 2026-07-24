@@ -677,10 +677,21 @@ a:hover {
   transform: translateY(40px);
   transition: transform 500ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity 350ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
-.js-loaded .gallery-grid__item {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: calc(400ms + var(--index) * 30ms);
+.gallery-grid__item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  z-index: -1;
+}
+.gallery-grid__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.2, 0, 0, 1);
+  pointer-events: none;
 }
 .gallery-grid__item img {
   width: 100%;
@@ -900,6 +911,14 @@ a:hover {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
 body.modal-open {
