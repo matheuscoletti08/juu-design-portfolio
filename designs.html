@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Design | Juu Freitas</title>
+
+        <!-- Open Graph -->
+    <meta property="og:title" content="Design | Juu Freitas">
+    <meta property="og:description" content="Portfólio de design — identidade visual, direção criativa e projetos autorais por Juu Freitas.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://picturesjully.netlify.app/designs.html">
+    <meta property="og:image" content="https://picturesjully.netlify.app/assets/images/img-og.jpg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Design | Juu Freitas">
+    <meta name="twitter:description" content="Portfólio de design — identidade visual, direção criativa e projetos autorais por Juu Freitas.">
+    <meta name="twitter:image" content="https://picturesjully.netlify.app/assets/images/img-og.jpg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
@@ -11,14 +25,15 @@
 </head>
 <body>
 
+    <div class="cursor" aria-hidden="true"></div>
+
     <header class="header">
         <div class="container">
-            <div class="header-status"><span></span> Available</div>
-            <a href="index.html" class="logo">JULIA.FREITAS</a>
+            <a href="index.html" class="logo">@pictures.jully</a>
             <nav class="nav-menu">
                 <a href="index.html">Home</a>
-                <a href="projetos.html" class="active">Projetos</a>
-                <a href="index.html#contato">Contato</a>
+                <a href="projects.html" class="active">Projetos</a>
+                <a href="#contato">Contato</a>
             </nav>
             <div class="nav-toggle">
                 <div class="burger"></div>
@@ -29,15 +44,15 @@
     <div class="mobile-overlay">
         <nav class="mobile-nav">
             <a href="index.html">Home</a>
-            <a href="projetos.html" class="active">Projetos</a>
-            <a href="index.html#contato">Contato</a>
+            <a href="projects.html">Projetos</a>
+            <a href="#contato">Contato</a>
         </nav>
     </div>
 
     <main id="content-wrap">
         <section class="portfolio" style="padding-top: 150px;">
             <div class="container">
-                <a href="projetos.html" class="label" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; cursor: pointer;">
+                <a href="projects.html" class="label" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; cursor: pointer;">
                     ← Voltar para Projetos
                 </a>
                 <h1 style="font-size: var(--font-xl); font-weight: 800; text-transform: uppercase; line-height: 0.9;">TRABALHOS DE <br><span class="text-blue">DESIGN.</span></h1>
@@ -51,7 +66,14 @@
         <div id="photo-modal" class="modal">
             <div class="modal__content">
                 <button class="modal__close" aria-label="Fechar">&times;</button>
+                <button class="modal__nav modal__nav--prev" aria-label="Anterior">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="modal__nav modal__nav--next" aria-label="Próximo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
                 <img src="" alt="" class="modal__img">
+                <span class="modal__counter" aria-live="polite"></span>
             </div>
         </div>
     </main>
@@ -59,6 +81,7 @@
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 Julia Freitas — All rights reserved.</p>
+            <p style="font-size: 0.79em;">feito por <a href="https://github.com/matheuscoletti08">ℭoletti</a></p>
         </div>
     </footer>
 
