@@ -3,9 +3,8 @@
 body.cursor-visible {
     cursor: none;
 
-    a, button, .gallery-grid__item, .projects-split__block, .services__item, .hero__cta,
-    input, textarea, select, [role="button"] {
-        cursor: none;
+    * {
+        cursor: none !important;
     }
 }
 

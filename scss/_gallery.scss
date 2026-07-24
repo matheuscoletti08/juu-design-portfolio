@@ -79,6 +79,12 @@
         transform: translateY(40px);
         transition: transform $duration-large $m3-decelerate, opacity $duration-medium $m3-decelerate;
 
+        .js-loaded & {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: calc(400ms + (var(--index) * 30ms));
+        }
+
         // Skeleton shimmer
         &::before {
             content: '';
@@ -90,14 +96,6 @@
             z-index: -1;
         }
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform $duration-large $m3-emphasized;
-            pointer-events: none;
-        }
-        
         img {
             width: 100%;
             height: 100%;
