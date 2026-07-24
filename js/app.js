@@ -415,8 +415,8 @@ function initCursor() {
     });
 
     function animate() {
-        posX += (mouseX - posX) * 0.12;
-        posY += (mouseY - posY) * 0.12;
+        posX = mouseX;
+        posY = mouseY;
         cursor.style.left = `${posX}px`;
         cursor.style.top = `${posY}px`;
         requestAnimationFrame(animate);
@@ -443,7 +443,6 @@ async function navigateToPage(url, triggerElement = null) {
     }
 
     if (triggerElement) triggerElement.style.opacity = '0.7';
-    document.body.style.cursor = 'wait';
 
     try {
         const response = await fetch(url.href);
@@ -453,7 +452,6 @@ async function navigateToPage(url, triggerElement = null) {
         const nextMain = nextDoc.querySelector('#content-wrap');
         
         const transition = document.startViewTransition(() => {
-            document.body.style.cursor = '';
             document.documentElement.style.scrollBehavior = 'auto';
             document.querySelector('#content-wrap').innerHTML = nextMain.innerHTML;
             document.title = nextDoc.title;
@@ -476,7 +474,6 @@ async function navigateToPage(url, triggerElement = null) {
     } catch (err) {
         window.location.href = url.href;
     } finally {
-        document.body.style.cursor = '';
         delete document.documentElement.dataset.transition;
     }
 }
