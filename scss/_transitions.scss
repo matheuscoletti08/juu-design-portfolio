@@ -6,59 +6,68 @@
     animation-timing-function: $m3-emphasized;
 }
 
+::view-transition-image-pair(root) {
+    isolation: auto;
+    mix-blend-mode: normal;
+}
+
+// Transição padrão (Fade suave com profundidade)
+html[data-transition="fade"] {
+    ::view-transition-old(root) {
+        animation: 280ms $m3-emphasized both fade-out;
+    }
+    ::view-transition-new(root) {
+        animation: 420ms $m3-decelerate both fade-in;
+    }
+}
+
+// Transição do menu mobile (Slide lateral sutil)
+html[data-transition="menu"] {
+    ::view-transition-old(root) {
+        animation: 300ms $m3-emphasized both fade-out;
+    }
+    ::view-transition-new(root) {
+        animation: 450ms $m3-decelerate both fade-in,
+                   450ms $m3-decelerate both slide-from-right;
+    }
+}
+
 // Transição de expansão (Projetos -> Galeria)
 html[data-transition="expand"] {
     ::view-transition-old(root) {
-        animation: $duration-short $m3-accelerate both fade-out,
-                   $duration-large $m3-emphasized both scale-out;
+        animation: 250ms $m3-accelerate both fade-out,
+                   400ms $m3-emphasized both scale-out;
     }
     ::view-transition-new(root) {
-        animation: $duration-medium $m3-decelerate both fade-in,
-                   $duration-large $m3-emphasized both scale-in-up;
+        animation: 450ms $m3-decelerate both fade-in,
+                   450ms $m3-emphasized both scale-in-up;
     }
-}
-
-// Transição padrão (Fade suave)
-html[data-transition="fade"] {
-    ::view-transition-old(root) {
-        animation: $duration-medium $m3-accelerate both fade-out;
-    }
-    ::view-transition-new(root) {
-        animation: $duration-large $m3-decelerate both fade-in;
-    }
-}
-
-// Quando a transição vem do menu, fazemos um slide lateral
-html[data-transition="menu"] {
-    ::view-transition-old(root) {
-        animation: $duration-medium $m3-accelerate both fade-out,
-                   $duration-medium $m3-accelerate both slide-to-left;
-    }
-    ::view-transition-new(root) {
-        animation: $duration-large $m3-decelerate both fade-in,
-                   $duration-large $m3-decelerate both slide-from-right;
-    }
-}
-
-@keyframes slide-to-left {
-    to { transform: translateX(-30px); }
 }
 
 @keyframes slide-from-right {
-    from { transform: translateX(30px); }
-    to { transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 @keyframes scale-out {
-    to { transform: scale(1.05); opacity: 0; }
+    to {
+        transform: scale(1.03);
+        opacity: 0;
+    }
 }
 
 @keyframes scale-in-up {
-    from { 
+    from {
         opacity: 0;
-        transform: scale(0.95) translateY(20px);
+        transform: scale(0.97) translateY(12px);
     }
-    to { 
+    to {
         opacity: 1;
         transform: scale(1) translateY(0);
     }

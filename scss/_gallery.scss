@@ -302,6 +302,42 @@
         }
     }
 
+    &__swipe-hint {
+        position: fixed;
+        bottom: max(80px, env(safe-area-inset-bottom) + 56px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2001;
+        color: rgba($color-white, 0.6);
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity $duration-medium $m3-decelerate;
+
+        &.visible {
+            opacity: 1;
+        }
+
+        .swipe-hint__arrows {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+            justify-content: center;
+
+            span {
+                opacity: 0.4;
+                animation: swipeHintPulse 1.6s ease-in-out infinite;
+                font-size: 1.2rem;
+
+                &:nth-child(2) { animation-delay: 0.2s; }
+                &:nth-child(3) { animation-delay: 0.4s; }
+            }
+        }
+    }
+
     &__close {
         position: fixed;
         top: max(20px, env(safe-area-inset-top));
@@ -426,6 +462,11 @@
 @keyframes shimmer {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
+}
+
+@keyframes swipeHintPulse {
+    0%, 100% { opacity: 0.3; transform: translateX(0); }
+    50% { opacity: 0.9; transform: translateX(4px); }
 }
 
 body.modal-open {
