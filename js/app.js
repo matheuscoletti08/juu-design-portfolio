@@ -46,8 +46,11 @@ const GalleryModule = {
         prevBtn: null,
         nextBtn: null,
         counter: null,
+        swipeHint: null,
         mainContent: null,
     },
+
+    swipeHintTimer: null,
 
     swipe: {
         startX: 0,
@@ -67,8 +70,11 @@ const GalleryModule = {
         this.elements.nextBtn = this.elements.modal.querySelector('.modal__nav--next');
         this.elements.counter = this.elements.modal.querySelector('.modal__counter');
 
+        this.elements.swipeHint = null;
+
         this.renderGrid();
         this.setupAccessibility();
+        this.createSwipeHint();
         this.bindEvents();
     },
 
@@ -76,6 +82,43 @@ const GalleryModule = {
         this.elements.modal.setAttribute('role', 'dialog');
         this.elements.modal.setAttribute('aria-modal', 'true');
         this.elements.modal.setAttribute('aria-hidden', 'true');
+    },
+
+    createSwipeHint() {
+        if (this.elements.swipeHint) return;
+        const hint = document.createElement('div');
+        hint.className = 'modal__swipe-hint';
+        hint.innerHTML = `
+            Deslize para navegar
+            <div class="swipe-hint__arrows">
+                <span>›</span>
+                <span>›</span>
+                <span>›</span>
+            </div>
+        `;
+        this.elements.modal.appendChild(hint);
+        this.elements.swipeHint = hint;
+    },
+
+    showSwipeHint() {
+        if (!this.elements.swipeHint) return;
+        const isTouch = 'ontouchstart' in window;
+        if (!isTouch) return;
+        const hasMultiple = this.state.collection.length > 1;
+        if (!hasMultiple) return;
+        this.swipeHintTimer = setTimeout(() => {
+            this.elements.swipeHint.classList.add('visible');
+        }, 1500);
+    },
+
+    hideSwipeHint() {
+        if (this.swipeHintTimer) {
+            clearTimeout(this.swipeHintTimer);
+            this.swipeHintTimer = null;
+        }
+        if (this.elements.swipeHint) {
+            this.elements.swipeHint.classList.remove('visible');
+        }
     },
 
     renderGrid() {
@@ -138,8 +181,8 @@ const GalleryModule = {
             };
         }
 
-        this.elements.modal.addEventListener('touchstart', (e) => this.onTouchStart(e), { passive: true });
-        this.elements.modal.addEventListener('touchend', (e) => this.onTouchEnd(e), { passive: true });
+        this.elements.modal.ontouchstart = (e) => this.onTouchStart(e);
+        this.elements.modal.ontouchend = (e) => this.onTouchEnd(e);
 
         document.removeEventListener('keydown', this.globalKeyHandler);
         this.globalKeyHandler = this.globalKeyHandler.bind(this);
@@ -161,6 +204,7 @@ const GalleryModule = {
 
     onTouchEnd(e) {
         if (this.state.current !== this.STATES.OPEN) return;
+        this.hideSwipeHint();
         const touch = e.changedTouches[0];
         const deltaX = touch.clientX - this.swipe.startX;
         const deltaY = touch.clientY - this.swipe.startY;
@@ -181,6 +225,7 @@ const GalleryModule = {
         this.state.currentIndex = idx;
         this.state.activeSrc = src;
 
+        this.hideSwipeHint();
         this.elements.modalImg.src = src;
         this.updateCounter();
         this.updateNavButtons();
@@ -247,6 +292,7 @@ const GalleryModule = {
 
             this.updateCounter();
             this.updateNavButtons();
+            this.showSwipeHint();
             this.elements.closeBtn.focus();
         } catch (error) {
             console.error('Gallery preloader failed:', error);
@@ -265,6 +311,7 @@ const GalleryModule = {
 
     async handleClose() {
         if (this.state.current === this.STATES.IDLE) return;
+        this.hideSwipeHint();
 
         const finishClose = () => {
             this.state.current = this.STATES.IDLE;
@@ -302,6 +349,11 @@ const GalleryModule = {
  * Global App Orchestration
  */
 document.addEventListener('DOMContentLoaded', () => {
+    if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     initNavigation();
     initScrollEffects();
     initMobileMenu();
@@ -312,14 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('pageshow', (event) => {
-    document.body.classList.add('js-loaded');
     if (event.persisted) {
-        document.querySelectorAll('.hero__img').forEach(el => {
-            el.style.animation = 'none';
-            void el.offsetWidth;
-            el.style.animation = '';
-        });
+        window.scrollTo(0, 0);
     }
+    document.body.classList.add('js-loaded');
 });
 
 function initScrollEffects() {
