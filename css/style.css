@@ -277,50 +277,45 @@ a:hover {
   aspect-ratio: 4/5;
   object-fit: cover;
   background-color: #171718;
-  transition: transform 500ms cubic-bezier(0.2, 0, 0, 1), border-color 350ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
   will-change: transform, opacity;
   opacity: 0;
-  animation: heroImageEntrance 1s cubic-bezier(0.05, 0.7, 0.1, 1) forwards;
+  transform: translateY(60px) scale(0.85);
+  transition: transform 1s cubic-bezier(0.05, 0.7, 0.1, 1), opacity 1s cubic-bezier(0.05, 0.7, 0.1, 1), border-color 350ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 .hero__img:nth-child(even) {
-  --current-offset: var(--hero-offset);
+  top: var(--hero-offset);
 }
 .hero__img:nth-child(odd) {
-  --current-offset: 0px;
+  top: 0;
 }
 .hero__img:nth-child(1) {
-  animation-delay: 100ms;
+  transition-delay: 100ms;
 }
 .hero__img:nth-child(2) {
-  animation-delay: 200ms;
+  transition-delay: 200ms;
 }
 .hero__img:nth-child(3) {
-  animation-delay: 300ms;
+  transition-delay: 300ms;
+}
+.js-loaded .hero__img {
+  opacity: 1;
+  transform: scale(1);
 }
 @media (min-width: 768px) {
   .hero__img {
     max-width: 200px;
   }
   .hero__img:hover {
-    transform: scale(1.04) rotate(2deg) translateY(var(--current-offset));
+    transform: scale(1.04) rotate(2deg);
     z-index: 10;
     border-color: #000AFF;
   }
 }
 .hero__img:active {
-  transform: scale(0.98) translateY(var(--current-offset));
+  transform: scale(0.98);
   transition-duration: 200ms;
-}
-@keyframes heroImageEntrance {
-  from {
-    opacity: 0;
-    transform: translateY(60px) scale(0.85);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(var(--current-offset)) scale(1);
-  }
 }
 .hero__title {
   font-size: var(--font-display);
@@ -870,6 +865,41 @@ a:hover {
   transform: translateX(-50%) translateY(0);
   transition-delay: 300ms;
 }
+.modal__swipe-hint {
+  position: fixed;
+  bottom: max(80px, env(safe-area-inset-bottom) + 56px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2001;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 350ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.modal__swipe-hint.visible {
+  opacity: 1;
+}
+.modal__swipe-hint .swipe-hint__arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+.modal__swipe-hint .swipe-hint__arrows span {
+  opacity: 0.4;
+  animation: swipeHintPulse 1.6s ease-in-out infinite;
+  font-size: 1.2rem;
+}
+.modal__swipe-hint .swipe-hint__arrows span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.modal__swipe-hint .swipe-hint__arrows span:nth-child(3) {
+  animation-delay: 0.4s;
+}
 .modal__close {
   position: fixed;
   top: max(20px, env(safe-area-inset-top));
@@ -989,6 +1019,16 @@ a:hover {
     background-position: -200% 0;
   }
 }
+@keyframes swipeHintPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(4px);
+  }
+}
 body.modal-open {
   overflow: hidden;
   touch-action: none;
@@ -1091,50 +1131,52 @@ body.cursor-pointer .cursor {
   animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 
-html[data-transition=expand] ::view-transition-old(root) {
-  animation: 200ms cubic-bezier(0.3, 0, 0.8, 0.15) both fade-out, 500ms cubic-bezier(0.2, 0, 0, 1) both scale-out;
-}
-html[data-transition=expand] ::view-transition-new(root) {
-  animation: 350ms cubic-bezier(0.05, 0.7, 0.1, 1) both fade-in, 500ms cubic-bezier(0.2, 0, 0, 1) both scale-in-up;
+::view-transition-image-pair(root) {
+  isolation: auto;
+  mix-blend-mode: normal;
 }
 
 html[data-transition=fade] ::view-transition-old(root) {
-  animation: 350ms cubic-bezier(0.3, 0, 0.8, 0.15) both fade-out;
+  animation: 280ms cubic-bezier(0.2, 0, 0, 1) both fade-out;
 }
 html[data-transition=fade] ::view-transition-new(root) {
-  animation: 500ms cubic-bezier(0.05, 0.7, 0.1, 1) both fade-in;
+  animation: 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both fade-in;
 }
 
 html[data-transition=menu] ::view-transition-old(root) {
-  animation: 350ms cubic-bezier(0.3, 0, 0.8, 0.15) both fade-out, 350ms cubic-bezier(0.3, 0, 0.8, 0.15) both slide-to-left;
+  animation: 300ms cubic-bezier(0.2, 0, 0, 1) both fade-out;
 }
 html[data-transition=menu] ::view-transition-new(root) {
-  animation: 500ms cubic-bezier(0.05, 0.7, 0.1, 1) both fade-in, 500ms cubic-bezier(0.05, 0.7, 0.1, 1) both slide-from-right;
+  animation: 450ms cubic-bezier(0.05, 0.7, 0.1, 1) both fade-in, 450ms cubic-bezier(0.05, 0.7, 0.1, 1) both slide-from-right;
 }
 
-@keyframes slide-to-left {
-  to {
-    transform: translateX(-30px);
-  }
+html[data-transition=expand] ::view-transition-old(root) {
+  animation: 250ms cubic-bezier(0.3, 0, 0.8, 0.15) both fade-out, 400ms cubic-bezier(0.2, 0, 0, 1) both scale-out;
 }
+html[data-transition=expand] ::view-transition-new(root) {
+  animation: 450ms cubic-bezier(0.05, 0.7, 0.1, 1) both fade-in, 450ms cubic-bezier(0.2, 0, 0, 1) both scale-in-up;
+}
+
 @keyframes slide-from-right {
   from {
-    transform: translateX(30px);
+    opacity: 0;
+    transform: translateX(24px);
   }
   to {
+    opacity: 1;
     transform: translateX(0);
   }
 }
 @keyframes scale-out {
   to {
-    transform: scale(1.05);
+    transform: scale(1.03);
     opacity: 0;
   }
 }
 @keyframes scale-in-up {
   from {
     opacity: 0;
-    transform: scale(0.95) translateY(20px);
+    transform: scale(0.97) translateY(12px);
   }
   to {
     opacity: 1;
