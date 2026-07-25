@@ -148,8 +148,11 @@ a:hover {
   grid-column: 3;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   z-index: 1005;
   cursor: pointer;
+  padding: 12px;
+  margin: -12px;
 }
 @media (min-width: 1024px) {
   .header .nav-toggle {
@@ -235,6 +238,7 @@ a:hover {
   flex-direction: column;
   justify-content: center;
   position: relative;
+  content-visibility: visible;
   padding-top: 80px;
 }
 @media (min-width: 768px) {
@@ -904,6 +908,72 @@ a:hover {
     border-color: #000AFF;
     transform: scale(1.1);
   }
+}
+.modal__nav {
+  position: fixed;
+  top: 50%;
+  z-index: 2001;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: auto;
+  opacity: 0;
+  transition: all 350ms cubic-bezier(0.2, 0, 0, 1);
+  user-select: none;
+}
+.active .modal__nav {
+  opacity: 1;
+  transition-delay: 300ms;
+}
+.modal__nav--prev {
+  left: max(16px, env(safe-area-inset-left));
+}
+.modal__nav--next {
+  right: max(16px, env(safe-area-inset-right));
+}
+.modal__nav:active {
+  transform: translateY(-50%) scale(0.9);
+  background: #000AFF;
+}
+@media (hover: hover) {
+  .modal__nav:hover {
+    background: #000AFF;
+    border-color: #000AFF;
+    transform: translateY(-50%) scale(1.1);
+  }
+}
+@media (max-width: 767px) {
+  .modal__nav {
+    display: none;
+  }
+}
+.modal__counter {
+  position: fixed;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2001;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 350ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.active .modal__counter {
+  opacity: 1;
+  transition-delay: 400ms;
 }
 
 @keyframes spin {
