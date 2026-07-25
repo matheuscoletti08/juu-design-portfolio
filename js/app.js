@@ -9,11 +9,11 @@ const CONFIG = {
     photos: [
         'IMG_1321.webp', 'IMG_1322.webp', 'IMG_1323.webp',
         'IMG_1324.webp',
-        'IMG_8554.webp', 'IMG_8555.webp', 'IMG_8556.webp',
-        'IMG_8557.webp', 'IMG_8558.webp', 'IMG_8559.webp',
-        'IMG_8560.webp', 'IMG_8561.webp', 'IMG_8562.webp',
-        'IMG_8563.webp', 'IMG_8564.webp', 'IMG_8565.webp',
-        'IMG_8566.webp', 'IMG_8567.webp',
+        'IMG_8554.webp', 'IMG_8555.webp', 'IMG_8567.webp',
+        'IMG_8556.webp', 'IMG_8557.webp', 'IMG_8558.webp',
+        'IMG_8559.webp', 'IMG_8560.webp', 'IMG_8561.webp',
+        'IMG_8562.webp', 'IMG_8563.webp', 'IMG_8564.webp',
+        'IMG_8565.webp', 'IMG_8566.webp', 
     ],
     designs: [
         'IMG_0414.webp', 'IMG_0416.webp', 'IMG_0417.webp',
@@ -21,7 +21,7 @@ const CONFIG = {
         'IMG_7061.webp', 'IMG_7186.webp', 'IMG_8348.webp',
         'IMG_8527.webp', 'IMG_8529.webp', 'IMG_8530.webp',
         'IMG_8533.webp', 'IMG_8535.webp', 'IMG_8536.webp',
-        'IMG_8553.webp', 'IMG_9978.webp'
+        'IMG_9978.webp', 'IMG_8553.webp'
     ]
 };
 
@@ -34,9 +34,8 @@ const GalleryModule = {
     state: {
         current: 'idle',
         activeSrc: null,
-        activeIndex: -1,
         collection: [],
-        basePath: '',
+        currentIndex: -1,
     },
 
     elements: {
@@ -47,7 +46,12 @@ const GalleryModule = {
         prevBtn: null,
         nextBtn: null,
         counter: null,
-        mainContent: null
+        mainContent: null,
+    },
+
+    swipe: {
+        startX: 0,
+        startY: 0,
     },
 
     init() {
@@ -63,10 +67,6 @@ const GalleryModule = {
         this.elements.nextBtn = this.elements.modal.querySelector('.modal__nav--next');
         this.elements.counter = this.elements.modal.querySelector('.modal__counter');
 
-        const isDesign = this.elements.grid.id === 'design-grid';
-        this.state.collection = isDesign ? CONFIG.designs : CONFIG.photos;
-        this.state.basePath = isDesign ? 'assets/images/designs/' : 'assets/images/photos/';
-
         this.renderGrid();
         this.setupAccessibility();
         this.bindEvents();
@@ -81,19 +81,24 @@ const GalleryModule = {
     renderGrid() {
         if (!this.elements.grid || this.elements.grid.children.length > 0) return;
 
+        const isDesign = this.elements.grid.id === 'design-grid';
+        const names = isDesign ? CONFIG.designs : CONFIG.photos;
+        const basePath = isDesign ? 'assets/images/designs/' : 'assets/images/photos/';
+
+        this.state.collection = names.map(name => basePath + name);
+
         const fragment = document.createDocumentFragment();
-        this.state.collection.forEach((img, index) => {
+        names.forEach((img, index) => {
             const item = document.createElement('div');
             item.className = 'gallery-grid__item';
-            item.dataset.src = `${this.state.basePath}${img}`;
-            item.dataset.index = index;
+            item.dataset.src = this.state.collection[index];
             item.setAttribute('role', 'button');
             item.setAttribute('aria-label', `Visualizar trabalho ${index + 1}`);
             item.style.setProperty('--index', index);
 
             item.innerHTML = `
                 <div class="gallery-grid__ripple"></div>
-                <img src="${this.state.basePath}${img}" alt="Portfolio Julia Freitas" loading="lazy" decoding="async">
+                <img src="${this.state.collection[index]}" alt="Portfolio Julia Freitas" loading="lazy" decoding="async">
             `;
             fragment.appendChild(item);
         });
@@ -103,10 +108,7 @@ const GalleryModule = {
     bindEvents() {
         this.elements.grid.onclick = (e) => {
             const item = e.target.closest('.gallery-grid__item');
-            if (item) {
-                const idx = parseInt(item.dataset.index);
-                this.handleOpen(idx);
-            }
+            if (item) this.handleOpen(item.dataset.src);
         };
 
         this.elements.modal.onclick = (e) => {
@@ -125,38 +127,19 @@ const GalleryModule = {
         if (this.elements.prevBtn) {
             this.elements.prevBtn.onclick = (e) => {
                 e.stopPropagation();
-                this.navigate(-1);
+                this.handlePrev();
             };
         }
 
         if (this.elements.nextBtn) {
             this.elements.nextBtn.onclick = (e) => {
                 e.stopPropagation();
-                this.navigate(1);
+                this.handleNext();
             };
         }
 
-        // Touch swipe
-        this.swipeStartX = 0;
-        this.swipeStartY = 0;
-        this.elements.modal.addEventListener('touchstart', (e) => {
-            if (this.state.current !== this.STATES.OPEN) return;
-            const t = e.touches[0];
-            this.swipeStartX = t.clientX;
-            this.swipeStartY = t.clientY;
-        }, { passive: true });
-
-        this.elements.modal.addEventListener('touchmove', (e) => {
-            if (this.state.current !== this.STATES.OPEN || this.swipeStartX === 0) return;
-            const t = e.touches[0];
-            const dx = t.clientX - this.swipeStartX;
-            const dy = t.clientY - this.swipeStartY;
-            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-                if (e.cancelable) e.preventDefault();
-                this.navigate(dx > 0 ? -1 : 1);
-                this.swipeStartX = 0;
-            }
-        }, { passive: false });
+        this.elements.modal.addEventListener('touchstart', (e) => this.onTouchStart(e), { passive: true });
+        this.elements.modal.addEventListener('touchend', (e) => this.onTouchEnd(e), { passive: true });
 
         document.removeEventListener('keydown', this.globalKeyHandler);
         this.globalKeyHandler = this.globalKeyHandler.bind(this);
@@ -165,68 +148,72 @@ const GalleryModule = {
 
     globalKeyHandler(e) {
         if (this.state.current === this.STATES.IDLE) return;
-
-        if (e.key === 'Escape') {
-            this.handleClose();
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            this.navigate(-1);
-        } else if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            this.navigate(1);
-        }
+        if (e.key === 'Escape') { this.handleClose(); return; }
+        if (e.key === 'ArrowLeft') { this.handlePrev(); return; }
+        if (e.key === 'ArrowRight') { this.handleNext(); return; }
     },
 
-    navigate(dir) {
+    onTouchStart(e) {
+        const touch = e.touches[0];
+        this.swipe.startX = touch.clientX;
+        this.swipe.startY = touch.clientY;
+    },
+
+    onTouchEnd(e) {
         if (this.state.current !== this.STATES.OPEN) return;
+        const touch = e.changedTouches[0];
+        const deltaX = touch.clientX - this.swipe.startX;
+        const deltaY = touch.clientY - this.swipe.startY;
 
-        const newIndex = this.state.activeIndex + dir;
-        if (newIndex < 0 || newIndex >= this.state.collection.length) return;
-
-        const src = `${this.state.basePath}${this.state.collection[newIndex]}`;
-        this.handleNavigate(src, newIndex);
-    },
-
-    async handleNavigate(src, index) {
-        this.state.current = this.STATES.LOADING;
-        this.state.activeSrc = src;
-        this.state.activeIndex = index;
-
-        this.elements.modal.classList.add('is-loading');
-        this.elements.modalImg.style.opacity = '0';
-
-        try {
-            await this.preloadImage(src);
-            if (this.state.activeSrc !== src) return;
-
-            this.elements.modalImg.src = src;
-            this.elements.modalImg.style.opacity = '';
-            this.elements.modal.classList.remove('is-loading');
-            this.state.current = this.STATES.OPEN;
-            this.updateCounter();
-            this.preloadAdjacent(index);
-        } catch (error) {
-            console.error('Navigation preload failed:', error);
-            this.state.current = this.STATES.OPEN;
+        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+            if (deltaX > 0) this.handlePrev();
+            else this.handleNext();
         }
     },
+
+    navigate(direction) {
+        const idx = this.state.currentIndex + direction;
+        if (idx < 0 || idx >= this.state.collection.length) return;
+
+        const src = this.state.collection[idx];
+        if (!src) return;
+
+        this.state.currentIndex = idx;
+        this.state.activeSrc = src;
+
+        this.elements.modalImg.src = src;
+        this.updateCounter();
+        this.updateNavButtons();
+    },
+
+    handlePrev() { this.navigate(-1); },
+    handleNext() { this.navigate(1); },
 
     updateCounter() {
-        if (this.elements.counter) {
-            this.elements.counter.textContent = `${this.state.activeIndex + 1} / ${this.state.collection.length}`;
+        if (!this.elements.counter) return;
+        this.elements.counter.textContent = `${this.state.currentIndex + 1}/${this.state.collection.length}`;
+    },
+
+    updateNavButtons() {
+        if (this.elements.prevBtn) {
+            this.elements.prevBtn.disabled = this.state.currentIndex <= 0;
+            this.elements.prevBtn.style.opacity = this.state.currentIndex <= 0 ? '0' : '';
+        }
+        if (this.elements.nextBtn) {
+            this.elements.nextBtn.disabled = this.state.currentIndex >= this.state.collection.length - 1;
+            this.elements.nextBtn.style.opacity = this.state.currentIndex >= this.state.collection.length - 1 ? '0' : '';
         }
     },
 
-    async handleOpen(index) {
+    async handleOpen(src) {
         if (this.state.current !== this.STATES.IDLE) return;
 
-        const src = `${this.state.basePath}${this.state.collection[index]}`;
-        const clickedItem = this.elements.grid.querySelector(`[data-index="${index}"]`);
+        const clickedItem = document.querySelector(`[data-src="${src}"]`);
         const clickedImg = clickedItem ? clickedItem.querySelector('img') : null;
 
         this.state.current = this.STATES.LOADING;
         this.state.activeSrc = src;
-        this.state.activeIndex = index;
+        this.state.currentIndex = this.state.collection.indexOf(src);
 
         this.elements.modal.classList.add('active', 'is-loading');
         this.elements.modal.setAttribute('aria-hidden', 'false');
@@ -239,10 +226,9 @@ const GalleryModule = {
 
             if (document.startViewTransition && clickedImg) {
                 clickedImg.style.viewTransitionName = 'active-image';
+                this.elements.modalImg.style.viewTransitionName = 'active-image';
 
                 const transition = document.startViewTransition(() => {
-                    clickedImg.style.viewTransitionName = '';
-                    this.elements.modalImg.style.viewTransitionName = 'active-image';
                     this.elements.modalImg.src = src;
                     this.elements.modal.classList.remove('is-loading');
                     this.elements.modal.classList.add('is-loaded');
@@ -250,6 +236,7 @@ const GalleryModule = {
                 });
 
                 await transition.finished;
+                clickedImg.style.viewTransitionName = '';
                 this.elements.modalImg.style.viewTransitionName = '';
             } else {
                 this.elements.modalImg.src = src;
@@ -259,7 +246,7 @@ const GalleryModule = {
             }
 
             this.updateCounter();
-            this.preloadAdjacent(index);
+            this.updateNavButtons();
             this.elements.closeBtn.focus();
         } catch (error) {
             console.error('Gallery preloader failed:', error);
@@ -271,18 +258,8 @@ const GalleryModule = {
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = resolve;
-            img.onerror = resolve;
+            img.onerror = reject;
             img.src = src;
-        });
-    },
-
-    preloadAdjacent(fromIndex) {
-        const indices = [fromIndex - 1, fromIndex + 1];
-        indices.forEach(i => {
-            if (i >= 0 && i < this.state.collection.length) {
-                const img = new Image();
-                img.src = `${this.state.basePath}${this.state.collection[i]}`;
-            }
         });
     },
 
@@ -290,10 +267,9 @@ const GalleryModule = {
         if (this.state.current === this.STATES.IDLE) return;
 
         const finishClose = () => {
-            document.activeElement?.blur();
             this.state.current = this.STATES.IDLE;
             this.state.activeSrc = null;
-            this.state.activeIndex = -1;
+            this.state.currentIndex = -1;
             this.elements.modal.classList.remove('active', 'is-loaded', 'is-loading');
             this.elements.modal.setAttribute('aria-hidden', 'true');
             if (this.elements.mainContent) this.elements.mainContent.setAttribute('aria-hidden', 'false');
@@ -304,23 +280,18 @@ const GalleryModule = {
         };
 
         if (document.startViewTransition && this.state.activeSrc) {
-            const originalItem = this.elements.grid.querySelector(`[data-index="${this.state.activeIndex}"]`);
+            const originalItem = document.querySelector(`[data-src="${this.state.activeSrc}"]`);
             const originalImg = originalItem ? originalItem.querySelector('img') : null;
 
             if (originalImg) {
+                originalImg.style.viewTransitionName = 'active-image';
                 this.elements.modalImg.style.viewTransitionName = 'active-image';
-
-                const transition = document.startViewTransition(() => {
-                    this.elements.modalImg.style.viewTransitionName = '';
-                    originalImg.style.viewTransitionName = 'active-image';
-                    finishClose();
-                });
-
-                await transition.finished;
-                originalImg.style.viewTransitionName = '';
-            } else {
-                finishClose();
             }
+
+            const transition = document.startViewTransition(() => finishClose());
+            await transition.finished;
+            if (originalImg) originalImg.style.viewTransitionName = '';
+            this.elements.modalImg.style.viewTransitionName = '';
         } else {
             finishClose();
         }
@@ -335,19 +306,25 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollEffects();
     initMobileMenu();
     GalleryModule.init();
-    initCursor();
     initContentObserver();
     
     setTimeout(() => document.body.classList.add('js-loaded'), 100);
 });
 
+window.addEventListener('pageshow', (event) => {
+    document.body.classList.add('js-loaded');
+    if (event.persisted) {
+        document.querySelectorAll('.hero__img').forEach(el => {
+            el.style.animation = 'none';
+            void el.offsetWidth;
+            el.style.animation = '';
+        });
+    }
+});
+
 function initScrollEffects() {
     const header = document.querySelector('.header');
     if (!header) return;
-
-    const isGalleryPage = window.location.pathname.endsWith('photos.html') || window.location.pathname.endsWith('designs.html');
-    if (isGalleryPage) header.classList.add('scrolled');
-
     window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 50);
     }, { passive: true });
@@ -366,10 +343,10 @@ function initMobileMenu() {
         document.body.style.overflow = isOpen ? 'hidden' : '';
     };
 
-    toggle.onclick = toggleAction;
-    links.forEach(l => l.onclick = () => {
+    toggle.addEventListener('click', toggleAction);
+    links.forEach(l => l.addEventListener('click', () => {
         if (overlay.classList.contains('active')) toggleAction();
-    });
+    }));
 }
 
 function initContentObserver() {
@@ -385,46 +362,6 @@ function initContentObserver() {
         }
     });
     observer.observe(contentWrap, { childList: true });
-}
-
-function initCursor() {
-    const cursor = document.querySelector('.cursor');
-    if (!cursor) return;
-
-    if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
-
-    let posX = 0, posY = 0;
-    let mouseX = 0, mouseY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        document.body.classList.add('cursor-visible');
-    });
-
-    document.addEventListener('mouseleave', () => {
-        document.body.classList.remove('cursor-visible');
-    });
-
-    document.addEventListener('mouseenter', () => {
-        document.body.classList.add('cursor-visible');
-    });
-
-    // Hover state for interactive elements
-    document.addEventListener('mouseover', (e) => {
-        const target = e.target.closest('a, button, .gallery-grid__item, .projects-split__block, .services__item, .hero__cta');
-        document.body.classList.toggle('cursor-pointer', !!target);
-    });
-
-    function animate() {
-        posX = mouseX;
-        posY = mouseY;
-        cursor.style.left = `${posX}px`;
-        cursor.style.top = `${posY}px`;
-        requestAnimationFrame(animate);
-    }
-
-    animate();
 }
 
 /**
@@ -445,6 +382,7 @@ async function navigateToPage(url, triggerElement = null) {
     }
 
     if (triggerElement) triggerElement.style.opacity = '0.7';
+    document.body.style.cursor = 'wait';
 
     try {
         const response = await fetch(url.href);
@@ -454,6 +392,7 @@ async function navigateToPage(url, triggerElement = null) {
         const nextMain = nextDoc.querySelector('#content-wrap');
         
         const transition = document.startViewTransition(() => {
+            document.body.style.cursor = '';
             document.documentElement.style.scrollBehavior = 'auto';
             document.querySelector('#content-wrap').innerHTML = nextMain.innerHTML;
             document.title = nextDoc.title;
@@ -476,6 +415,7 @@ async function navigateToPage(url, triggerElement = null) {
     } catch (err) {
         window.location.href = url.href;
     } finally {
+        document.body.style.cursor = '';
         delete document.documentElement.dataset.transition;
     }
 }
@@ -500,7 +440,7 @@ function updateActiveLinks() {
     const path = window.location.pathname;
     document.querySelectorAll('.nav-menu a, .mobile-nav a').forEach(link => {
         const linkHref = link.getAttribute('href');
-        const isActive = path.endsWith(linkHref) || (path === '/' && linkHref === 'index.html');
+        const isActive = path.includes(linkHref) || (path === '/' && linkHref === 'index.html');
         link.classList.toggle('active', isActive);
     });
 }
